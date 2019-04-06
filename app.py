@@ -23,7 +23,7 @@ ids = {}
 def dl(file_id):
     if file_id in ids:
         path = ids[file_id]
-        return send_file(path, as_attachment=True, attachment_filename=os.path.basename(path))
+        return send_file(path, conditional=True, as_attachment=True, attachment_filename=os.path.basename(path))
     else:
         return 'Are you looking for something?', 404
 
@@ -36,6 +36,7 @@ def secret_view():
         if not fid in ids:
             ids[fid] = f
     resp = ''
-    for fid in ids:
+    sids = sorted(ids, key=ids.get)
+    for fid in sids:
         resp += '<a href="dl/{}">{}</a><br>'.format(fid, ids[fid])
     return resp
